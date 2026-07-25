@@ -81,6 +81,61 @@ export const api = {
   updateFollowup: (id: string, data: unknown) =>
     request(`/followups/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
   deleteFollowup: (id: string) => request(`/followups/${id}`, { method: "DELETE" }),
+
+  listSiteVisits: (contactId?: string) =>
+    request(`/site-visits${contactId ? `?contact_id=${contactId}` : ""}`),
+  createSiteVisit: (data: unknown) =>
+    request("/site-visits", { method: "POST", body: JSON.stringify(data) }),
+  updateSiteVisit: (id: string, data: unknown) =>
+    request(`/site-visits/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
+  deleteSiteVisit: (id: string) => request(`/site-visits/${id}`, { method: "DELETE" }),
+
+  listDocuments: (contactId?: string) =>
+    request(`/documents${contactId ? `?contact_id=${contactId}` : ""}`),
+  createDocument: (data: unknown) =>
+    request("/documents", { method: "POST", body: JSON.stringify(data) }),
+  deleteDocument: (id: string) => request(`/documents/${id}`, { method: "DELETE" }),
+
+  listPaymentMilestones: (dealId?: string) =>
+    request(`/payment-milestones${dealId ? `?deal_id=${dealId}` : ""}`),
+  createPaymentMilestone: (data: unknown) =>
+    request("/payment-milestones", { method: "POST", body: JSON.stringify(data) }),
+  updatePaymentMilestone: (id: string, data: unknown) =>
+    request(`/payment-milestones/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
+  deletePaymentMilestone: (id: string) => request(`/payment-milestones/${id}`, { method: "DELETE" }),
+
+  listAutomations: () => request("/automations"),
+  updateAutomation: (key: string, data: unknown) =>
+    request(`/automations/${key}`, { method: "PATCH", body: JSON.stringify(data) }),
+  runAutomation: (key: string) => request(`/automations/${key}/run`, { method: "POST" }),
+  listAutomationLogs: () => request("/automations/logs/recent"),
+
+  listProperties: () => request("/properties"),
+  createProperty: (data: unknown) =>
+    request("/properties", { method: "POST", body: JSON.stringify(data) }),
+  getProperty: (id: string) => request(`/properties/${id}`),
+  updateProperty: (id: string, data: unknown) =>
+    request(`/properties/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
+  deleteProperty: (id: string) => request(`/properties/${id}`, { method: "DELETE" }),
+
+  listPipelineStages: () => request("/pipeline-stages"),
+  createPipelineStage: (data: unknown) =>
+    request("/pipeline-stages", { method: "POST", body: JSON.stringify(data) }),
+  updatePipelineStage: (id: string, data: unknown) =>
+    request(`/pipeline-stages/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
+  deletePipelineStage: (id: string) => request(`/pipeline-stages/${id}`, { method: "DELETE" }),
+
+  createPropertyShareLink: (propertyId: string, contactId?: string | null) =>
+    request(`/properties/${propertyId}/share-link`, {
+      method: "POST",
+      body: JSON.stringify({ contact_id: contactId || null }),
+    }),
+  listPropertyViews: (propertyId: string) => request(`/properties/${propertyId}/views`),
+  getPublicProperty: (token: string) =>
+    fetch(`${API_URL}/public/properties/${token}`).then(async (res) => {
+      if (!res.ok) throw new Error("This listing link is invalid or expired.");
+      return res.json();
+    }),
 };
 
 export { API_URL };
